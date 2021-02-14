@@ -1,0 +1,17 @@
+{
+    "name": "Bob",
+    "level": 2,
+    "attacks": [
+        {
+            "attackRolls": [8, 5, 2],
+            "normalDmg": ["1d8-1"],
+            "critDmg": ["2d8-2", "1d10"]
+        },
+        {
+            "attackRolls": [7, 4],
+            "normalDmg": ["1d8+2"],
+            "critDmg": ["2d8+4"]
+
+        },
+    ]
+}
