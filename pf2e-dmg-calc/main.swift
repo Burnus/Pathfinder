@@ -215,21 +215,3 @@ func main() {
     	}
     }
 }
-
-/* * *
-*	Debugging Calls
-*
-	for i in (-1...21) {
-		print ("\(i): \(getACforCR(CR: i))")
-	}
-*
-    let dieRolls=["2d3", "4d6+3", "2d12-3", "23", "2d12+3-6", "+0", "d2d3"]
-	for r in dieRolls {print("\(r) will yield \(parseDice(rollArray: [r])).")}
-*
-    var thisCheck = checkRoll()
-	for i in (0...40) {
-		thisCheck.DC = i
-		print("d20+\(thisCheck.modifier): \(100*thisCheck.getProbToHit()) % to hit DC \(thisCheck.DC).")
-		print("d20+\(thisCheck.modifier): \(100*thisCheck.getProbToCrit()) % to crit DC \(thisCheck.DC).")
-	}
-* * */
