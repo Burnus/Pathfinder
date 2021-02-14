@@ -26,7 +26,7 @@ func getACforCR(CR: Int) -> Int {
 * Calculate the average result of a dice roll.
 * - roll string should be provided like "2d8+3" (meaning we roll 2 8-sided dice, add their results and add another 3) or "7d4-2" (roll 7 4-sided dice, add their results and subtract 2). The part behind the "+" (or "-") sign may be expressed as an arithmatic formula (like "6-4") for conveniance. Parsing errors will result in a return value of -99.0 along with an error prompt. If the input is a fixed value that can be interpreted as a floating point number (such as "5"), it will be returned.
 * * */
-func parseDice(rollArray: [String]) -> Double {
+func avgResultForDiceRoll(rollArray: [String]) -> Double {
     var avgResult = 0.0
     for roll in rollArray {
         let rolls=roll.split(separator: "d")
@@ -89,7 +89,7 @@ func parseDice(rollArray: [String]) -> Double {
 *   A natural 1 will be treated as 1 degree worse than it would numerically be (if this makes a difference) and conversely a natural 20 as 1 degree better.
 * * */
  struct checkRoll {
-	var modifier = 13
+	var modifier = 0
 	var DC = 10
 	func getProbToHit() -> Double {
 		let requiredRoll = DC-modifier
@@ -119,8 +119,8 @@ func parseDice(rollArray: [String]) -> Double {
 /* * *
 *   Attack rolls contain
 *	- attackBonus: An Array of all applicable attack bonusses (including MAP)
-*	- normalDmg: The average damage of a non-critical hit (may be calculated via parseDice())
-*	- critDmg: The average damage of a critical hit (may be calculated via parseDice())
+*	- normalDmg: The average damage of a non-critical hit (may be calculated via avgResultForDiceRoll())
+*	- critDmg: The average damage of a critical hit (may be calculated via avgResultForDiceRoll())
 * * */
 struct attackRolls {
 	var attackBonus = [0]
@@ -140,13 +140,13 @@ func main() {
     var level = 2
     var attacks = [
         attackRolls(
-            attackBonus: [8, 5, 2],
-            normalDmg: parseDice(rollArray: ["1d8-1"]),
-            critDmg: parseDice(rollArray: ["2d8-2", "1d10"])),
+            attackBonus: [10, 5, 0],
+            normalDmg: avgResultForDiceRoll(rollArray: ["1d8-1"]),
+            critDmg: avgResultForDiceRoll(rollArray: ["2d8-2", "1d10"])),
         attackRolls(
-            attackBonus: [7, 4],
-            normalDmg: parseDice(rollArray: ["1d6+3"]),
-            critDmg: parseDice(rollArray: ["2d6+6"]))
+            attackBonus: [7, 2],
+            normalDmg: avgResultForDiceRoll(rollArray: ["1d6+3"]),
+            critDmg: avgResultForDiceRoll(rollArray: ["2d6+6"]))
         ]
     var jsonURLs: [URL] = []
 
@@ -177,11 +177,11 @@ func main() {
                             var thisNormalDmg: Double
                             var thisCritDmg: Double
                             if let normalDmgRolls = thisAttack["normalDmg"] as? [String] {
-                                thisNormalDmg = parseDice(rollArray: normalDmgRolls)
+                                thisNormalDmg = avgResultForDiceRoll(rollArray: normalDmgRolls)
                                 if let thisAttackRolls = thisAttack["attackRolls"] as? [Int] {
                                     thisAttackBonusses = thisAttackRolls
                                     if let CritDmgRolls = thisAttack["critDmg"] as? [String] {
-                                        thisCritDmg = parseDice(rollArray: CritDmgRolls)
+                                        thisCritDmg = avgResultForDiceRoll(rollArray: CritDmgRolls)
                                     } else {
                                         thisCritDmg = 2.0 * thisNormalDmg
                                     }
